@@ -1,5 +1,5 @@
 # crypto
-privkey = "fa57417b549b0e303dbe6a0653b25810f818442fdf0c0e264d7cb546e9c9f310"
+privkey = "4d6275b2f6f554700b368f38cdffb0e7aacfc198a5df0dce638956abaf3b145c"
 
 # db config
 data_path = "./data"
@@ -14,7 +14,7 @@ listening_address = "0.0.0.0:1337"
 rpc_timeout = 10
 
 [[network.bootstraps]]
-pubkey = "03d158fb85df6201708f2cbde51e0b7c2d8835a28aaea7ed243e5db1aa442b18b1"
+pubkey = "0398ea7eb6f0424f310baa38c54ed735cf4125d9135f45288be44ad979b7a83e62"
 address = "173.20.0.21:1337"
 
 [mempool]
