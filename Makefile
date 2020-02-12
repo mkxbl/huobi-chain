@@ -1,5 +1,7 @@
 ERBOSE := $(if ${CI},--verbose,)
 
+COMMIT := $(shell git rev-parse --short HEAD)
+
 ifneq ("$(wildcard /usr/lib/librocksdb.so)","")
 	SYS_LIB_DIR := /usr/lib
 else ifneq ("$(wildcard /usr/lib64/librocksdb.so)","")
@@ -47,6 +49,12 @@ clippy:
 
 ci: fmt clippy test
 	git diff --exit-code Cargo.lock
+
+docker-build:
+	docker build -t mutadev/huobi:${COMMIT} .
+
+docker-push:
+	docker push mutadev/huobi:${COMMIT}
 
 info:
 	date
