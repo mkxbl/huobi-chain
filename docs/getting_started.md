@@ -405,11 +405,17 @@ $ muta-cli repl
 
 需要预先安装 [docker](https://www.docker.com/)。
 
+1. 构建 docker 镜像
+
 ```bash
 cd /path/to/huobi-chain
 
-# 可将 bft-4-node.yaml 中的 image 替换成自己 build 出来的镜像:
-# docker build -t huobi:tag .
+make docker-build
+```
+
+2. 运行 docker compose 命令起链
+
+```bash
 docker compose -f devtools/docker-compose/bft-4-node.yaml up
 ```
 
