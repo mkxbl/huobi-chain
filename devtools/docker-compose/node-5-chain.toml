@@ -1,0 +1,39 @@
+# crypto
+# related address: 303c652252ff8ba12832001615a9691ed53760eb
+# related pub key: 021d878a5ca754f51b28019a384267cfdbcc06a9efac1202f69e1c6eb207a69c89
+# related bls pub key: 0400f1731fe0dcf61b9b796d3d507df069bc897eef6fe420b9177ec53a377d42c464a611b09bdc7eb78032d1e40b892bae11b8c210e0256e6dbb40a2eb6c0017e1fcf4cce7c148aee967eaa754b72fbd1becda1fb932eab214ff63dfbf30029816
+privkey = "b768c7826c938eb1bdbceabe8ec79d53b727f752a448730a18c2b6f49407292d"
+
+# db config
+data_path = "./data"
+
+[graphql]
+listening_address = "0.0.0.0:8000"
+graphql_uri = "/graphql"
+graphiql_uri = "/graphiql"
+
+[network]
+listening_address = "0.0.0.0:1337"
+rpc_timeout = 10
+
+[[network.bootstraps]]
+pubkey = "0398ea7eb6f0424f310baa38c54ed735cf4125d9135f45288be44ad979b7a83e62"
+address = "173.20.0.21:1337"
+
+[mempool]
+pool_size = 20000
+broadcast_txs_size = 200
+broadcast_txs_interval = 200
+
+[executor]
+light = false
+
+[logger]
+filter = "info"
+log_to_console = true
+console_show_file_and_line = false
+log_path = "logs/"
+log_to_file = true
+metrics = true
+# you can specify log level for modules with config below
+# modules_level = { "overlord::state::process" = "debug", core_consensus = "error" }
