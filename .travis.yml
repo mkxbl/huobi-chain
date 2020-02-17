@@ -10,7 +10,7 @@ git:
   depth: 1
   submodules: false
 
-if: 'branch IN (master, develop, staging, trying) OR type != push OR fork = true OR tag =~ ^v'
+if: 'branch IN (master, test-travis, staging, trying) OR fork = true OR tag =~ ^v'
 
 addons:
   apt:
@@ -23,8 +23,8 @@ matrix:
   include:
   - rust: nightly
 
-install: ./devtools/ci/install.sh
-script: ./devtools/ci/script.sh
+install: make test
+script: cargo build
 
 env:
   global:
@@ -37,3 +37,12 @@ env:
 before_cache:
   - rm -rf ./target/debug/incremental/
   - cargo sweep -f
+
+deploy:
+  provider: releases
+  file_glob: true
+  file: ./target/release/huobi-chain
+  skip_cleanup: true
+  on:
+    branch: test-travis  # i guess we do need this after all?
+  api_key: "$GITHUB_TOKEN"
