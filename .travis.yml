@@ -23,7 +23,7 @@ matrix:
   include:
   - rust: nightly
 
-install: make test
+install: cargo check
 script: cargo build
 
 env:
@@ -45,4 +45,5 @@ deploy:
   skip_cleanup: true
   on:
     branch: test-travis  # i guess we do need this after all?
-  api_key: "$GITHUB_TOKEN"
+  api_key:
+    secure: "oTm88S1LUu6FPYYf5J2UU0SxNdkeLtbA4gIKyZdF1RDJOKoYDlL9gu4uOpelaMD6ouBgQPmHdwERKozJ/ixMPAeeFLYRodET8DsKR/A/xJ/tT2cfBrKY8irWU0TiBkqkaAi00rqWIJMLhk8QtCCrHLbe8CLaJiewE6VR5k+0flAx4DJ1P158sb/jXH3ghs/chD7jds1BhKtLvfd7rVHWum+a/IMeh0zAqBEE7oVnClzLMiaaoBQ7uxElCbdIuNVEsgj0H8RIYfGRvg1qmgW+oi524109AxH4ELUHzt7tW00cYuNAeVWNrzpIntHEGFiBGfUyVHophDnom/MYPj5CIM9UhQIJSucBEhc7Hd14P48/o2LgeNeCGULqymRlb5thb9k3YT8l4XtV0J89tV36KPOHVxk8AB9+bh17KU/nktQuaHiSWJj8IAzclhOudtSEC0pV7B8Cgjb1McAue4e/p4fkyljhtRHa6ivqnnJ1RftBC4/pLVPtXjMsfqqB84232GbFTiY+fYHe1HNhLUwJvNW8lJqXeP5Z9McEPtMS8xmQupeQOyKvvw6V67bu5Cbz71u1xd5jS+yvJOE7qxFTTHu8HPXYybp6nxWf6+L8rJQ76eNOY32Y/HMMxX+yuYh3+YLtKgX0No/c9dpcNTINuuIwU83A0ZrZShr9uvkla1A="
