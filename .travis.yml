@@ -3,12 +3,9 @@ rust: nightly
 dist: bionic
 sudo: true
 
-# use sccache and limit cache size to 2G, so travis cache command dont timeout
 env:
   global:
     - RUST_BACKTRACE=full
-    - RUSTC_WRAPPER=sccache
-    - SCCACHE_CACHE_SIZE="2G" 
     - USE_SYS_ROCKSDB: true
     - FMT: true
     - CHECK: true
@@ -16,14 +13,12 @@ env:
 
 before_cache:
   - rm -rf ./target/debug/incremental/
-  - rm -rf "$TRAVIS_HOME"/.cargo/registry"
 
 # cache sccache and its cache
 cache:
   apt: true
   directories:
     - $TRAVIS_HOME/.cargo/
-    - $TRAVIS_HOME/.cache/sccache
 
 git:
   depth: 2
