@@ -32,8 +32,11 @@ addons:
     - librocksdb5.8
     - librocksdb-dev
 
-install: ./devtools/ci/install.sh
-script: ./devtools/ci/script.sh
+# install: ./devtools/ci/install.sh
+# script: ./devtools/ci/script.sh
+
+install: echo "skip install"
+script: echo "skip script"
 
 matrix:
   include:
