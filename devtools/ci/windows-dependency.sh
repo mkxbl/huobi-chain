@@ -1,6 +1,7 @@
 #!/bin/bash
 set -ev
 
+powershell -Command "Set-ExecutionPolicy Unrestricted -Force"
 powershell -Command "Invoke-Expression (New-Object System.Net.WebClient).DownloadString('https://get.scoop.sh')"
 
 set PATH=%PATH%;%USERPROFILE%\scoop\shims
