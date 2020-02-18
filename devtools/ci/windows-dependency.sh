@@ -13,11 +13,12 @@ export PATH="$HOME/scoop/shims:$PATH;";
 
 powershell -Command "scoop install llvm"
 powershell -Command "scoop install msys2"
-powershell -Command "scoop install yasm"
+# powershell -Command "scoop install yasm"
+choco install yasm
 
 rustc --version
 cargo --version
 clang --version
-powershell -Command "yasm --version"
+yasm --version
 
 cargo build --release
