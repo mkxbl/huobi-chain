@@ -60,6 +60,7 @@ matrix:
       script: 
         - choco install yasm
         - choco install msys2
+        - choco install clang
         - cargo build --release
         - ./devtools/ci/package.sh
 
