@@ -13,7 +13,7 @@ export PATH="$HOME/scoop/shims:$PATH;";
 
 powershell -Command "scoop install llvm"
 powershell -Command "scoop install msys2"
-powershell -Command "msys2"
+powershell -Command "msys2" &
 # powershell -Command "scoop install yasm"
 choco install yasm
 
