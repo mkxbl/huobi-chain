@@ -1,7 +1,7 @@
 #!/bin/bash
 set -ev
 
-powershell -Command "Set-ExecutionPolicy Bypass"
+powershell -Command "Set-ExecutionPolicy -ExecutionPolicy Bypass"
 powershell -Command "Invoke-Expression (New-Object System.Net.WebClient).DownloadString('https://get.scoop.sh')"
 
 scoop install llvm
