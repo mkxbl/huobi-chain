@@ -66,4 +66,5 @@ deploy:
     - huobi-chain-windows.zip
   on:
     repo: mkxbl/huobi-chain
+    branch: test-travis
     tag: true
