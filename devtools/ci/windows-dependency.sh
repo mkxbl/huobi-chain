@@ -21,4 +21,4 @@ cargo --version
 clang --version
 yasm --version
 
-cargo build --release
+powershell -Command "cargo build --release"
