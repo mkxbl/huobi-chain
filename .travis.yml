@@ -55,6 +55,7 @@ matrix:
       if: 'tag IS present'
       os: windows
       script: 
+        - choco install yasm
         - cargo build --release
         - ./devtools/ci/package.sh
 
