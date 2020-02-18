@@ -58,10 +58,7 @@ matrix:
       if: 'tag IS present'
       os: windows
       script: 
-        - choco install yasm
-        - choco install msys2
-        - choco install clang
-        - cargo build --release
+        - ./devtools/ci/windows-dependency.sh
         - ./devtools/ci/package.sh
 
 deploy:
