@@ -1,19 +1,46 @@
 language: rust
+rust: nightly
 dist: bionic
 sudo: false
+
+# use sccache and limit cache size to 2G, so travis cache command dont timeout
+env:
+  global:
+    - RUST_BACKTRACE=full
+    - RUSTC_WRAPPER=sccache
+    - SCCACHE_CACHE_SIZE="2G" 
+    - USE_SYS_ROCKSDB: true
+    - FMT: true
+    - CHECK: true
+    - TEST: true
+
+before_cache:
+  - rm -rf ./target/debug/incremental/
+  - rm -rf "$TRAVIS_HOME"/.cargo/registry"
+
+# cache sccache and its cache
 cache:
-  cargo: true
   apt: true
+  directories:
+    - $TRAVIS_HOME/.cargo/
+    - $TRAVIS_HOME/.cache/sccache
+
 git:
-  depth: 1
+  depth: 2
   submodules: false
-if: branch IN (master, test-travis, staging, trying) OR fork = true OR tag =~ ^v
+
+if: branch IN (master, test-travis) OR fork = true OR tag =~ ^v
+
 addons:
   apt:
     packages:
     - gcc
     - librocksdb5.8
     - librocksdb-dev
+
+install: echo $TRAVIS_OS_NAME
+script: echo "skip skip skip"
+
 matrix:
   include:
     - name: linux package
@@ -23,20 +50,9 @@ matrix:
     - name: windows package
       os: windows
 
-rust: nightly
-install: echo "$TRAVIS_OS_NAME"
-script:
+before_deploy:
   - cargo build --release
-  - if [ "$TRAVIS_OS_NAME" = "windows" ]; then zip hbchain-$TRAVIS_OS_NAME.zip target/release/huobi-chain.exe; else tar zcvf hbchain-$TRAVIS_OS_NAME.tar.gz target/release/huobi-chain; fi
-env:
-  global:
-  - RUST_BACKTRACE=full
-  - USE_SYS_ROCKSDB: true
-  - FMT: true
-  - CHECK: true
-  - TEST: true
-before_cache:
-- rm -rf ./target/debug/incremental/
+  - ./devtools/ci/package.sh
 
 deploy:
   provider: releases
@@ -45,9 +61,9 @@ deploy:
   api_key:
     secure: YFFf2fCiZOKXa2cvS0LUjQexHna9wsIdVfWemfyn4M8fBpTVQpGEFZnlveHhqVFDXpBakm69PEh1ARbpmRQKgvuVDSF0x93U8BZPgVFasrek2PWxlEsN1Oy70hol4i5Nf6tO7xIx6QVueqk7r5wV0fB97C8fxM6EnQOY1NYphXw4uUhC2fH6ZF5wwF3V88EZu+3FcgO5VLEl15AJZ3aXN9QKpmaZ57fRqHXBVbTNXYbvPxwjg7E3qJfgPvyko5mfaFigJx3CvMdpUGWpo6mQtFwuKZbDuaKjEsvGYUALxZvp4bVI5jCD5GpIsweuO+MqazX/2plzHGHkh3SrwO7c/7PuUmOQ1FTv2bh2WeX9v6h8AVJCLRsdJTgBD+SQfWbDLCmHpAFOXikL5uCR+o7txeZbO7OQuL/axQGr/rhAKQQTyUxKKDO3Gs1pHuL3FLyaKkKNJBIQ7o4BfqvjIvUdPHsdhN8KhCcaczHGfjGJ64CmpHDTdHQAyYF9kRAwXOn7EuE/k5M2FvbIthDFybjrWi35pzskJPxfwSRuDXUieIBKfJorrIPSPpDBmaOF2YFv2NWquz3/LwBgG7AQyxoBd0r5xqCt9GfxQDnKoAbEYysyy1ZTJgSsx/96gdan8+9KSyPOAmgUMgHoRxzLWsYrxl4T4ql3aB8laoq9OSDi8hI=
   file:
-    - hbchain-linux.tar.gz
-    - hbchain-osx.tar.gz
-    - hbchain-windows.zip
+    - huobi-chain-linux.tar.gz
+    - huobi-chain-osx.tar.gz
+    - huobi-chain-windows.zip
   on:
     repo: mkxbl/huobi-chain
-    branch: test-travis
+    tag: true
