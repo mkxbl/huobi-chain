@@ -1,7 +1,7 @@
 language: rust
 rust: nightly
 dist: bionic
-sudo: false
+sudo: true
 
 # use sccache and limit cache size to 2G, so travis cache command dont timeout
 env:
@@ -38,11 +38,13 @@ addons:
     - librocksdb5.8
     - librocksdb-dev
 
-install: echo $TRAVIS_TAG
+install: echo "make install here"
 script: echo "make ci here"
 
 matrix:
   include:
+    - name: do ci
+      if: 'tag IS NOT present'
     - name: linux package
       if: 'tag IS present'
       os: linux
@@ -63,9 +65,9 @@ deploy:
   api_key:
     secure: YFFf2fCiZOKXa2cvS0LUjQexHna9wsIdVfWemfyn4M8fBpTVQpGEFZnlveHhqVFDXpBakm69PEh1ARbpmRQKgvuVDSF0x93U8BZPgVFasrek2PWxlEsN1Oy70hol4i5Nf6tO7xIx6QVueqk7r5wV0fB97C8fxM6EnQOY1NYphXw4uUhC2fH6ZF5wwF3V88EZu+3FcgO5VLEl15AJZ3aXN9QKpmaZ57fRqHXBVbTNXYbvPxwjg7E3qJfgPvyko5mfaFigJx3CvMdpUGWpo6mQtFwuKZbDuaKjEsvGYUALxZvp4bVI5jCD5GpIsweuO+MqazX/2plzHGHkh3SrwO7c/7PuUmOQ1FTv2bh2WeX9v6h8AVJCLRsdJTgBD+SQfWbDLCmHpAFOXikL5uCR+o7txeZbO7OQuL/axQGr/rhAKQQTyUxKKDO3Gs1pHuL3FLyaKkKNJBIQ7o4BfqvjIvUdPHsdhN8KhCcaczHGfjGJ64CmpHDTdHQAyYF9kRAwXOn7EuE/k5M2FvbIthDFybjrWi35pzskJPxfwSRuDXUieIBKfJorrIPSPpDBmaOF2YFv2NWquz3/LwBgG7AQyxoBd0r5xqCt9GfxQDnKoAbEYysyy1ZTJgSsx/96gdan8+9KSyPOAmgUMgHoRxzLWsYrxl4T4ql3aB8laoq9OSDi8hI=
   file:
-    - huobi-chain-linux.tar.gz
-    - huobi-chain-osx.tar.gz
-    - huobi-chain-windows.zip
+    - huobi-chain-linux-$TRAVIS_TAG.tar.gz
+    - huobi-chain-osx-$TRAVIS_TAG.tar.gz
+    - huobi-chain-windows-$TRAVIS_TAG.zip
   on:
     repo: mkxbl/huobi-chain
     tags: true
