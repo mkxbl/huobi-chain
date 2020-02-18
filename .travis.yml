@@ -38,21 +38,23 @@ addons:
     - librocksdb5.8
     - librocksdb-dev
 
-install: echo $TRAVIS_OS_NAME
-script: echo "skip skip skip"
+install: echo $TRAVIS_TAG
+script: echo "make ci here"
 
 matrix:
   include:
     - name: linux package
+      if: 'tag IS present'
       os: linux
+      script: ./devtools/ci/package.sh
     - name: osx package
+      if: 'tag IS present'
       os: osx
+      script: ./devtools/ci/package.sh
     - name: windows package
+      if: 'tag IS present'
       os: windows
-
-before_deploy:
-  - cargo build --release
-  - ./devtools/ci/package.sh
+      script: ./devtools/ci/package.sh
 
 deploy:
   provider: releases
@@ -66,5 +68,4 @@ deploy:
     - huobi-chain-windows.zip
   on:
     repo: mkxbl/huobi-chain
-    branch: test-travis
-    tag: true
+    tags: true
