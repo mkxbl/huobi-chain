@@ -56,7 +56,7 @@ matrix:
       os: windows
       script: 
         - choco install yasm
-        - choco install llvm-config
+        - choco install llvm
         - cargo build --release
         - ./devtools/ci/package.sh
 
