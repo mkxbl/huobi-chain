@@ -4,8 +4,6 @@ set -ev
 powershell -Command "Set-ExecutionPolicy Unrestricted -Force"
 powershell -Command "Invoke-Expression (New-Object System.Net.WebClient).DownloadString('https://get.scoop.sh')"
 
-scoop help
-
 scoop install llvm
 scoop install msys2
 scoop install yasm
