@@ -48,15 +48,21 @@ matrix:
     - name: linux package
       if: 'tag IS present'
       os: linux
-      script: ./devtools/ci/package.sh
+      script: 
+        - cargo build --release
+        - ./devtools/ci/package.sh
     - name: osx package
       if: 'tag IS present'
       os: osx
-      script: ./devtools/ci/package.sh
+      script: 
+        - cargo build --release
+        - ./devtools/ci/package.sh
     - name: windows package
       if: 'tag IS present'
       os: windows
-      script: ./devtools/ci/package.sh
+      script: 
+        - cargo build --release
+        - ./devtools/ci/package.sh
 
 deploy:
   provider: releases

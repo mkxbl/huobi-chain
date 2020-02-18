@@ -3,7 +3,6 @@ set -ev
 
 echo "figure out where i am"
 echo $PWD
-cargo build --release
 mkdir package
 cp -r ./config ./package/
 if [ "$TRAVIS_OS_NAME" == "windows" ]
