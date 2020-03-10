@@ -326,7 +326,6 @@ impl<SDK: ServiceSDK> AssetService<SDK> {
                 allowance: BTreeMap::new(),
             });
         let sender_balance = sender_asset_balance.value;
-        dbg!(&sender, &sender_balance);
 
         if sender_balance < value {
             return Err(ServiceError::LackOfBalance {

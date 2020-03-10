@@ -78,7 +78,6 @@ describe("node manager service API test via muta-sdk-js", () => {
   test("test regular progress", async () => {
     // Set admin
     let receipt = await setAdmin(accounts[0].address);
-    console.log(receipt);
     expect(receipt.response.isError).toBe(false);
     let admin = accounts[0];
     // Get admin
