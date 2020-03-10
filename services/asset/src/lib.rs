@@ -7,7 +7,7 @@ use std::collections::BTreeMap;
 use bytes::Bytes;
 use derive_more::{Display, From};
 
-use binding_macro::{cycles, genesis, service, write};
+use binding_macro::{cycles, genesis, service, tx_hook_before, write};
 use protocol::traits::{ExecutorParams, ServiceSDK, StoreMap};
 use protocol::types::{Address, Hash, ServiceContext};
 use protocol::{ProtocolError, ProtocolErrorKind, ProtocolResult};
@@ -17,6 +17,9 @@ use crate::types::{
     GetAllowanceResponse, GetAssetPayload, GetBalancePayload, GetBalanceResponse,
     InitGenesisPayload, TransferEvent, TransferFromEvent, TransferFromPayload, TransferPayload,
 };
+
+const FEE_ASSET_KEY: &str = "fee_asset";
+const FEE_ACCOUNT_KEY: &str = "fee_account";
 
 pub struct AssetService<SDK> {
     sdk:    SDK,
@@ -34,7 +37,7 @@ impl<SDK: ServiceSDK> AssetService<SDK> {
     #[genesis]
     fn init_genesis(&mut self, payload: InitGenesisPayload) -> ProtocolResult<()> {
         let asset = Asset {
-            id:     payload.id,
+            id:     payload.id.clone(),
             name:   payload.name,
             symbol: payload.symbol,
             supply: payload.supply,
@@ -48,8 +51,26 @@ impl<SDK: ServiceSDK> AssetService<SDK> {
             allowance: BTreeMap::new(),
         };
 
+        self.sdk.set_value(FEE_ASSET_KEY.to_owned(), payload.id)?;
+        self.sdk
+            .set_value(FEE_ACCOUNT_KEY.to_owned(), payload.fee_account)?;
         self.sdk
             .set_account_value(&asset.issuer, asset.id, asset_balance)
+    }
+
+    #[tx_hook_before]
+    fn tx_hook_before_(&mut self, ctx: ServiceContext) -> ProtocolResult<()> {
+        let caller = ctx.get_caller();
+        let asset_id: Hash = self
+            .sdk
+            .get_value(&FEE_ASSET_KEY.to_owned())?
+            .expect("fee asset should not be empty");
+        let to: Address = self
+            .sdk
+            .get_value(&FEE_ACCOUNT_KEY.to_owned())?
+            .expect("fee account should not be empty");
+        self._transfer(caller, to, asset_id, 1)
+            .map_err(|_e| ServiceError::FeeNotEnough.into())
     }
 
     #[cycles(100_00)]
@@ -305,6 +326,7 @@ impl<SDK: ServiceSDK> AssetService<SDK> {
                 allowance: BTreeMap::new(),
             });
         let sender_balance = sender_asset_balance.value;
+        dbg!(&sender, &sender_balance);
 
         if sender_balance < value {
             return Err(ServiceError::LackOfBalance {
@@ -363,6 +385,8 @@ pub enum ServiceError {
         expect: u64,
         real:   u64,
     },
+
+    FeeNotEnough,
 
     U64Overflow,
 

@@ -11,11 +11,12 @@ use protocol::ProtocolResult;
 /// Payload
 #[derive(Deserialize, Serialize, Clone, Debug)]
 pub struct InitGenesisPayload {
-    pub id:     Hash,
-    pub name:   String,
-    pub symbol: String,
-    pub supply: u64,
-    pub issuer: Address,
+    pub id:          Hash,
+    pub name:        String,
+    pub symbol:      String,
+    pub supply:      u64,
+    pub issuer:      Address,
+    pub fee_account: Address,
 }
 
 #[derive(Deserialize, Serialize, Clone, Debug)]

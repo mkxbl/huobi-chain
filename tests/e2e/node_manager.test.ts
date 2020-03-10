@@ -1,4 +1,5 @@
 import { muta, admin as ADMIN, delay, client, accounts } from "./utils";
+import { add_fee_token_to_accounts } from "./helper";
 
 async function setAdmin(admin) {
   const tx = await client.composeTransaction({
@@ -70,9 +71,14 @@ async function getMetadata() {
 }
 
 describe("node manager service API test via muta-sdk-js", () => {
+  beforeAll(async () => {
+    await add_fee_token_to_accounts(accounts.map(a => a.address));
+  });
+
   test("test regular progress", async () => {
     // Set admin
     let receipt = await setAdmin(accounts[0].address);
+    console.log(receipt);
     expect(receipt.response.isError).toBe(false);
     let admin = accounts[0];
     // Get admin
