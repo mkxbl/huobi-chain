@@ -17,6 +17,7 @@ pub struct InitGenesisPayload {
     pub supply:      u64,
     pub issuer:      Address,
     pub fee_account: Address,
+    pub fee:         u64,
 }
 
 #[derive(Deserialize, Serialize, Clone, Debug)]

@@ -8,7 +8,7 @@ use bytes::Bytes;
 use derive_more::{Display, From};
 
 use binding_macro::{cycles, genesis, service, tx_hook_before, write};
-use protocol::traits::{ExecutorParams, ServiceSDK, StoreMap};
+use protocol::traits::{ExecutorParams, ServiceSDK, StoreMap, StoreUint64};
 use protocol::types::{Address, Hash, ServiceContext};
 use protocol::{ProtocolError, ProtocolErrorKind, ProtocolResult};
 
@@ -24,14 +24,16 @@ const FEE_ACCOUNT_KEY: &str = "fee_account";
 pub struct AssetService<SDK> {
     sdk:    SDK,
     assets: Box<dyn StoreMap<Hash, Asset>>,
+    fee:    Box<dyn StoreUint64>,
 }
 
 #[service]
 impl<SDK: ServiceSDK> AssetService<SDK> {
     pub fn new(mut sdk: SDK) -> ProtocolResult<Self> {
         let assets: Box<dyn StoreMap<Hash, Asset>> = sdk.alloc_or_recover_map("assets")?;
+        let fee = sdk.alloc_or_recover_uint64("fee")?;
 
-        Ok(Self { sdk, assets })
+        Ok(Self { sdk, assets, fee })
     }
 
     #[genesis]
@@ -54,6 +56,7 @@ impl<SDK: ServiceSDK> AssetService<SDK> {
         self.sdk.set_value(FEE_ASSET_KEY.to_owned(), payload.id)?;
         self.sdk
             .set_value(FEE_ACCOUNT_KEY.to_owned(), payload.fee_account)?;
+        self.fee.set(payload.fee)?;
         self.sdk
             .set_account_value(&asset.issuer, asset.id, asset_balance)
     }
@@ -69,7 +72,8 @@ impl<SDK: ServiceSDK> AssetService<SDK> {
             .sdk
             .get_value(&FEE_ACCOUNT_KEY.to_owned())?
             .expect("fee account should not be empty");
-        self._transfer(caller, to, asset_id, 1)
+        let value = self.fee.get()?;
+        self._transfer(caller, to, asset_id, value)
             .map_err(|_e| ServiceError::FeeNotEnough.into())
     }
 

@@ -11,6 +11,7 @@ payload = '''
     "supply": 1000000000,
     "issuer": "0xcff1002107105460941f797828f468667aa1a2db",
 
+    "fee": 1,
     "fee_account": "0xcff1002107105460941f797828f468667aa1a2db"
 }
 '''
