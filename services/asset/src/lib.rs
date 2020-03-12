@@ -96,22 +96,6 @@ impl<SDK: ServiceSDK> AssetService<SDK> {
         self.assets.get(&asset_id)
     }
 
-    #[tx_hook_before]
-    fn tx_hook_before_(&mut self, ctx: ServiceContext) -> ProtocolResult<()> {
-        let caller = ctx.get_caller();
-        let asset_id: Hash = self
-            .sdk
-            .get_value(&FEE_ASSET_KEY.to_owned())?
-            .expect("fee asset should not be empty");
-        let to: Address = self
-            .sdk
-            .get_value(&FEE_ACCOUNT_KEY.to_owned())?
-            .expect("fee account should not be empty");
-        let value = self.fee.get()?;
-        self._transfer(caller, to, asset_id, value)
-            .map_err(|_e| ServiceError::FeeNotEnough.into())
-    }
-
     #[cycles(100_00)]
     #[read]
     fn get_asset(&self, ctx: ServiceContext, payload: GetAssetPayload) -> ProtocolResult<Asset> {
