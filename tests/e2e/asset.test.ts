@@ -136,8 +136,8 @@ describe("asset service API test via muta-sdk-js", () => {
     expect(gaRet.name).toBe("Test Token");
     expect(gaRet.symbol).toBe("TT");
     expect(gaRet.supply).toBe(8888);
-    expect(gaRet.supply).toBe(10000);
-    expect("0x" + gaRet.issuer).toBe(accounts[0].address);
+    expect(gaRet.precision).toBe(10000);
+    expect(gaRet.issuer).toBe(accounts[0].address);
 
     // Transfer
     const tranReceipt = await transfer(

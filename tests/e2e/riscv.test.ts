@@ -132,7 +132,7 @@ describe("riscv service", () => {
     // console.log({deploy_auth_res});
     expect(deploy_auth_res.isError).toBe(false);
     expect(JSON.parse(deploy_auth_res.ret).addresses).toStrictEqual([
-      acc.address.slice(2)
+      acc.address
     ]);
 
     // revoke auth

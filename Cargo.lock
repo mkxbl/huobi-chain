@@ -1787,9 +1787,9 @@ dependencies = [
 
 [[package]]
 name = "json"
-version = "0.12.1"
+version = "0.12.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "9a38661a28126f8621fb246611288ae28935ddf180f5e21f2d0fbfe5e4131dbe"
+checksum = "53cbc99268c271e1b373440fb5e59cd231c86805d4923c144697898d827edc61"
 
 [[package]]
 name = "juniper"
