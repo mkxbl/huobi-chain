@@ -39,10 +39,6 @@ impl<SDK: ServiceSDK> AssetService<SDK> {
 
     #[genesis]
     fn init_genesis(&mut self, payload: InitGenesisPayload) -> ProtocolResult<()> {
-        if payload.supply.checked_mul(payload.precision).is_none() {
-            return Err(ServiceError::U64Overflow.into());
-        }
-
         let asset = Asset {
             id:        payload.id.clone(),
             name:      payload.name,
@@ -81,6 +77,9 @@ impl<SDK: ServiceSDK> AssetService<SDK> {
             .get_value(&FEE_ACCOUNT_KEY.to_owned())?
             .expect("fee account should not be empty");
         let value = self.fee.get()?;
+        if caller == to {
+            return Ok(());
+        }
         self._transfer(caller, to, asset_id, value)
             .map_err(|_e| ServiceError::FeeNotEnough.into())
     }
@@ -176,9 +175,6 @@ impl<SDK: ServiceSDK> AssetService<SDK> {
         ctx: ServiceContext,
         payload: CreateAssetPayload,
     ) -> ProtocolResult<Asset> {
-        if payload.supply.checked_mul(payload.precision).is_none() {
-            return Err(ServiceError::U64Overflow.into());
-        }
         let caller = ctx.get_caller();
         let payload_str = serde_json::to_string(&payload).map_err(ServiceError::JsonParse)?;
 
@@ -214,8 +210,8 @@ impl<SDK: ServiceSDK> AssetService<SDK> {
     #[cycles(210_00)]
     #[write]
     fn transfer(&mut self, ctx: ServiceContext, payload: TransferPayload) -> ProtocolResult<()> {
-        let sender = if let Some(addr_bytes) = ctx.get_extra() {
-            Address::from_bytes(addr_bytes)?
+        let sender = if let Some(addr_hex) = ctx.get_extra() {
+            Address::from_hex(&String::from_utf8(addr_hex.to_vec()).expect("extra should be hex"))?
         } else {
             ctx.get_caller()
         };

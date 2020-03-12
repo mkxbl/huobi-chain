@@ -28,17 +28,7 @@ fn test_create_asset() {
     let mut service = new_asset_service();
 
     let supply = 1024 * 1024;
-    let supply_overflow = u64::max_value();
-    let precision = 100;
-
-    // test create_asset overflow
-    let ret = service.create_asset(context.clone(), CreateAssetPayload {
-        name: "testf".to_owned(),
-        symbol: "testf".to_owned(),
-        supply: supply_overflow,
-        precision,
-    });
-    assert_eq!(ret.is_err(), true);
+    let precision = 2;
 
     // test create_asset
     let asset = service
@@ -76,7 +66,7 @@ fn test_transfer() {
     let mut service = new_asset_service();
 
     let supply = 1024 * 1024;
-    let precision = 100;
+    let precision = 2;
     // test create_asset
     let asset = service
         .create_asset(context.clone(), CreateAssetPayload {
@@ -123,7 +113,7 @@ fn test_approve() {
     let mut service = new_asset_service();
 
     let supply = 1024 * 1024;
-    let precision = 100;
+    let precision = 2;
     let asset = service
         .create_asset(context.clone(), CreateAssetPayload {
             name: "test".to_owned(),
@@ -163,7 +153,7 @@ fn test_transfer_from() {
     let mut service = new_asset_service();
 
     let supply = 1024 * 1024;
-    let precision = 100;
+    let precision = 2;
     let asset = service
         .create_asset(context.clone(), CreateAssetPayload {
             name: "test".to_owned(),
