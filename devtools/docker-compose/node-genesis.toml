@@ -6,10 +6,10 @@ name = "asset"
 payload = '''
 {
     "id": "0xf56924db538e77bb5951eb5ff0d02b88983c49c45eea30e8ae3e7234b311436c",
-    "name": "Huobi Token",
-    "symbol": "HT",
+    "name": "Muta Token",
+    "symbol": "MT",
     "supply": 100000,
-    "precision": 10000,
+    "precision": 0,
     "issuer": "0xf8389d774afdad8755ef8e629e5a154fddc6325a"
 }
 '''
